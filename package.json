@@ -1,0 +1,40 @@
+{
+  "name": "woozi-wxt",
+  "version": "1.0.0",
+  "description": "Lead management and campaign automation Chrome extension with Supabase authentication. Organize leads into collections and streamline your sales productivity with modern web technologies.",
+  "keywords": ["chrome-extension", "lead-management", "lead-collections", "supabase", "campaign-automation", "CRM", "sales-productivity", "marketing-tools", "react", "typescript", "email-otp"],
+  "author": "Woozi Team",
+  "type": "module",
+  "scripts": {
+    "build": "wxt build && rm -rf ./woozi-extension-build && cp -r .output/chrome-mv3 ./woozi-extension-build",
+    "build:firefox": "wxt build -b firefox",
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "postinstall": "wxt prepare",
+    "type-check": "tsc --noEmit",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.3",
+    "@radix-ui/react-tabs": "^1.1.12",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.453.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.6",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "wxt": "^0.20.7"
+  }
+}

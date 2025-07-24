@@ -1,0 +1,94 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build outputs
+.output/
+dist/
+build/
+woozi-extension-build/
+*.zip
+
+# WXT specific
+.wxt/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Temporary folders
+tmp/
+temp/
+
+# Browser extension development
+web-ext-artifacts/
+
+# Package manager lock files (keep one, comment out others as needed)
+# npm
+# package-lock.json
+
+# yarn
+# yarn.lock
+
+# pnpm (keeping this one)
+# pnpm-lock.yaml
+
+# Cache directories
+.cache/
+.parcel-cache/
+
+# Storybook build outputs
+storybook-static
+
+# Local Netlify folder
+.netlify
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
