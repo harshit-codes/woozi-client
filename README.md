@@ -113,8 +113,8 @@ openssl rand -base64 32
 
 1. **Clone and install dependencies**
    ```bash
-   git clone <repository-url>
-   cd woozi-wxt
+   git clone https://github.com/harshit-codes/woozi-client.git
+   cd woozi-client
    pnpm install
    ```
 
