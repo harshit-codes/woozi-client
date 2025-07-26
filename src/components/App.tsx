@@ -67,7 +67,7 @@ export function App() {
   return (
     <AuthContext.Provider value={{ session, user, loading, showAuthModal, setShowAuthModal }}>
       <MainLayout>
-        <ScreenRenderer activeTab="home" onTabChange={() => {}} />
+        <ScreenRenderer />
       </MainLayout>
       <AuthModal 
         isOpen={showAuthModal} 

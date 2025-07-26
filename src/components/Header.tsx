@@ -42,7 +42,7 @@ function AuthSection() {
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1">
       <div className="flex items-center bg-secondary/50 rounded-md p-1">
         <User className="h-4 w-4 text-muted-foreground" />
       </div>
@@ -63,24 +63,24 @@ function AuthSection() {
 export function Header({ currentScreen }: HeaderProps) {
   return (
     <Card className="rounded-none border-0 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex items-center justify-between px-4 py-3">
+      <div className="flex items-center justify-between px-3 py-2.5">
         {/* Left: Woozi Logo and Name */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 min-w-0">
           <img 
             src="/woozi-logo-removebg-preview.png" 
             alt="Woozi" 
-            className="h-6 w-6 bg-white rounded-sm p-0.5"
+            className="h-5 w-5 bg-white rounded-sm p-0.5 flex-shrink-0"
           />
-          <span className="font-semibold text-foreground">Woozi</span>
+          <span className="font-semibold text-foreground text-sm truncate">Woozi</span>
         </div>
 
         {/* Center: Current Screen Title */}
-        <Badge variant="secondary" className="text-sm font-medium">
+        <Badge variant="secondary" className="text-xs font-medium px-2 py-1 flex-shrink-0">
           {currentScreen}
         </Badge>
 
-        {/* Right: Supabase Authentication */}
-        <div className="flex items-center">
+        {/* Right: Authentication - Compact */}
+        <div className="flex items-center flex-shrink-0">
           <AuthSection />
         </div>
       </div>

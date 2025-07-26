@@ -8,27 +8,42 @@ import {
   Trash2, 
   ChevronUp, 
   ChevronDown,
-  Folder
+  Folder,
+  Rocket,
+  TrendingUp
 } from 'lucide-react';
 import { LeadCollection, CollectionSort, SortDirection } from '../../types/collection';
 
-interface CollectionListViewProps {
+interface CollectionAnalytics {
+  qualityDistribution?: {
+    high: number;
+    medium: number;
+    low: number;
+  };
+  averageEngagement?: number;
+}
+
+interface EnhancedCollectionListViewProps {
   collections: LeadCollection[];
+  analytics?: { [collectionId: string]: CollectionAnalytics };
   onEdit: (collection: LeadCollection) => void;
   onDetailView: (collection: LeadCollection) => void;
   onClone: (collection: LeadCollection) => void;
+  onLaunchCampaign?: (collection: LeadCollection) => void;
   onDelete?: (collection: LeadCollection) => void;
   loading?: boolean;
 }
 
 export function CollectionListView({
   collections,
+  analytics = {},
   onEdit,
   onDetailView,
   onClone,
+  onLaunchCampaign,
   onDelete,
   loading = false
-}: CollectionListViewProps) {
+}: EnhancedCollectionListViewProps) {
   const [sort, setSort] = useState<CollectionSort>({
     column: 'lastUpdated',
     direction: 'desc'
@@ -68,8 +83,15 @@ export function CollectionListView({
   const SortIcon = ({ column }: { column: keyof LeadCollection }) => {
     if (sort.column !== column) return null;
     return sort.direction === 'asc' ? 
-      <ChevronUp className="h-3 w-3" /> : 
-      <ChevronDown className="h-3 w-3" />;
+      <ChevronUp className="h-4 w-4" /> : 
+      <ChevronDown className="h-4 w-4" />;
+  };
+
+  const getQualityColor = (high: number, total: number): string => {
+    const percentage = total > 0 ? (high / total) * 100 : 0;
+    if (percentage >= 60) return 'text-green-600';
+    if (percentage >= 30) return 'text-yellow-600';
+    return 'text-red-600';
   };
 
   if (loading) {
@@ -88,7 +110,7 @@ export function CollectionListView({
     return (
       <Card>
         <CardContent className="p-6 text-center">
-          <Folder className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
+          <Folder className="h-8 w-8 mx-auto mb-4 text-muted-foreground/50" />
           <div className="space-y-2">
             <h3 className="font-medium text-lg">No collections yet</h3>
             <p className="text-muted-foreground text-sm">
@@ -124,16 +146,18 @@ export function CollectionListView({
                   onClick={() => handleSort('leadCount')}
                 >
                   <div className="flex items-center gap-1">
-                    Number of Leads
+                    Leads
                     <SortIcon column="leadCount" />
                   </div>
                 </th>
+                <th className="text-left p-3 font-medium text-sm">Quality</th>
+                <th className="text-left p-3 font-medium text-sm">Engagement</th>
                 <th 
                   className="text-left p-3 font-medium text-sm cursor-pointer hover:bg-muted/80 transition-colors"
                   onClick={() => handleSort('lastUpdated')}
                 >
                   <div className="flex items-center gap-1">
-                    Last Updated
+                    Updated
                     <SortIcon column="lastUpdated" />
                   </div>
                 </th>
@@ -141,67 +165,111 @@ export function CollectionListView({
               </tr>
             </thead>
             <tbody>
-              {sortedCollections.map((collection) => (
-                <tr 
-                  key={collection.id}
-                  className="border-b hover:bg-muted/30 transition-colors"
-                >
-                  <td className="p-3">
-                    <div>
-                      <div className="font-medium text-sm">{collection.name}</div>
-                      {collection.description && (
-                        <div className="text-xs text-muted-foreground mt-1">
-                          {collection.description}
+              {sortedCollections.map((collection) => {
+                const collectionAnalytics = analytics[collection.id];
+                const qualityDist = collectionAnalytics?.qualityDistribution;
+                const highQualityCount = qualityDist?.high || 0;
+                const totalLeads = collection.leadCount;
+                
+                return (
+                  <tr 
+                    key={collection.id}
+                    className="border-b hover:bg-muted/30 transition-colors"
+                  >
+                    <td className="p-3">
+                      <div className="cursor-pointer" onClick={() => onDetailView(collection)}>
+                        <div className="font-medium text-sm hover:text-primary transition-colors">
+                          {collection.name}
                         </div>
+                        {collection.description && (
+                          <div className="text-xs text-muted-foreground mt-1">
+                            {collection.description}
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="p-3">
+                      <Badge variant="secondary" className="text-xs">
+                        {collection.leadCount}
+                      </Badge>
+                    </td>
+                    <td className="p-3">
+                      {qualityDist ? (
+                        <div className="flex items-center gap-2">
+                          <div className={`text-sm font-medium ${getQualityColor(highQualityCount, totalLeads)}`}>
+                            {totalLeads > 0 ? Math.round((highQualityCount / totalLeads) * 100) : 0}%
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            high quality
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-sm text-muted-foreground">-</div>
                       )}
-                    </div>
-                  </td>
-                  <td className="p-3">
-                    <Badge variant="secondary" className="text-xs">
-                      {collection.leadCount} leads
-                    </Badge>
-                  </td>
-                  <td className="p-3">
-                    <div className="text-sm text-muted-foreground">
-                      {formatDate(collection.lastUpdated)}
-                    </div>
-                  </td>
-                  <td className="p-3">
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={() => onEdit(collection)}
-                        className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors"
-                        title="Edit collection"
-                      >
-                        <Edit3 className="h-3.5 w-3.5" />
-                      </button>
-                      <button
-                        onClick={() => onDetailView(collection)}
-                        className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors"
-                        title="View details"
-                      >
-                        <Eye className="h-3.5 w-3.5" />
-                      </button>
-                      <button
-                        onClick={() => onClone(collection)}
-                        className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors"
-                        title="Clone collection"
-                      >
-                        <Copy className="h-3.5 w-3.5" />
-                      </button>
-                      {onDelete && (
+                    </td>
+                    <td className="p-3">
+                      {collectionAnalytics?.averageEngagement ? (
+                        <div className="flex items-center gap-1">
+                          <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm font-medium">
+                            {collectionAnalytics.averageEngagement.toFixed(1)}%
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="text-sm text-muted-foreground">-</div>
+                      )}
+                    </td>
+                    <td className="p-3">
+                      <div className="text-sm text-muted-foreground">
+                        {formatDate(collection.lastUpdated)}
+                      </div>
+                    </td>
+                    <td className="p-3">
+                      <div className="flex items-center gap-1">
+                        {onLaunchCampaign && collection.leadCount > 0 && (
+                          <button
+                            onClick={() => onLaunchCampaign(collection)}
+                            className="p-1.5 text-muted-foreground hover:text-primary hover:bg-muted rounded transition-colors"
+                            title="Launch campaign"
+                          >
+                            <Rocket className="h-4 w-4" />
+                          </button>
+                        )}
                         <button
-                          onClick={() => onDelete(collection)}
-                          className="p-1.5 text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                          title="Delete collection"
+                          onClick={() => onEdit(collection)}
+                          className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors"
+                          title="Edit collection"
                         >
-                          <Trash2 className="h-3.5 w-3.5" />
+                          <Edit3 className="h-4 w-4" />
                         </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                        <button
+                          onClick={() => onDetailView(collection)}
+                          className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors"
+                          title="View details"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => onClone(collection)}
+                          className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors"
+                          title="Clone collection"
+                        >
+                          <Copy className="h-4 w-4" />
+                        </button>
+                        {onDelete && (
+                          <button
+                            onClick={() => onDelete(collection)}
+                            className="p-1.5 text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                            title="Delete collection"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

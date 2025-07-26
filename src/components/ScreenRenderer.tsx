@@ -5,11 +5,11 @@ import { CampaignsPage } from './screens/CampaignsPage';
 import { HelpPage } from './screens/HelpPage';
 
 interface ScreenRendererProps {
-  activeTab: string;
-  onTabChange: (tab: string) => void;
+  activeTab?: string;
+  onTabChange?: (tab: string) => void;
 }
 
-export function ScreenRenderer({ activeTab, onTabChange }: ScreenRendererProps) {
+export function ScreenRenderer({ activeTab = 'home', onTabChange = () => {} }: ScreenRendererProps) {
   switch (activeTab) {
     case 'home':
       return <HomePage activeTab={activeTab} onTabChange={onTabChange} />;

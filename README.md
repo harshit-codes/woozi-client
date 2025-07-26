@@ -15,11 +15,12 @@ A modern Chrome extension for lead management and campaign automation, built wit
 
 - **Framework**: [WXT](https://wxt.dev/) - Next-gen Chrome extension framework
 - **Frontend**: React 18 + TypeScript
-- **Styling**: Tailwind CSS + Lucide React icons
+- **Styling**: Tailwind CSS + Lucide React icons + **Comprehensive Design System**
 - **Authentication**: [Supabase Auth](https://supabase.com/auth) with Email OTP
 - **Database**: Supabase PostgreSQL with Row Level Security
 - **Build Tool**: Vite
 - **Manifest**: Chrome Extension Manifest V3
+- **Design System**: Built on shadcn/ui with modular design tokens + Chrome extension optimizations
 
 ## 📋 Prerequisites
 
@@ -145,6 +146,82 @@ pnpm build
 pnpm zip
 ```
 
+## 🎨 Design System
+
+Woozi includes a comprehensive design system built on top of **shadcn/ui** with modular design tokens and Chrome extension optimizations.
+
+### Key Features
+
+- **🎯 Modular Token Architecture**: Primitive → Semantic → Component tokens
+- **📦 50+ Design Tokens**: Spacing, typography, colors, shadows, animations
+- **🔧 15+ Typography Components**: Heading1-4, Text, Caption, MetricValue
+- **📐 Layout Primitives**: Box, VStack, HStack, Grid with responsive props
+- **🎛️ Enhanced Components**: ActionButton with 8 variants, loading states
+- **📱 Chrome Extension Optimized**: Standardized sizing, compact spacing, responsive grids
+- **✅ Size Standardization**: Consistent button heights (40px/32px) and icon sizes (16px baseline)
+- **🔧 Validation Tools**: Spacing validation utilities and development debugging tools
+
+### Quick Usage
+
+```typescript
+import { 
+  VStack, 
+  MetricCard, 
+  ActionButton, 
+  Heading2,
+  space,
+  designSystem 
+} from '@/components/ui/design-system';
+
+// Use layout primitives
+<VStack gap="md" p="lg">
+  <Heading2>Lead Collections</Heading2>
+  <MetricCard value={24} label="Total Leads" />
+  <ActionButton variant="success" size="sm" fullWidth>
+    Launch Campaign
+  </ActionButton>
+</VStack>
+```
+
+### Design Token Structure
+
+```
+src/components/ui/design-system/
+├── tokens/
+│   ├── primitive.ts      # Base values (spacing, typography)
+│   ├── semantic.ts       # Contextual tokens (componentSpacing)
+│   ├── component.ts      # Component-specific tokens
+│   └── utils.ts         # Helper functions & validation
+├── Typography.tsx        # Complete typography system
+├── Box.tsx              # Layout primitive with 40+ props
+├── Stack.tsx            # Vertical/horizontal stack system
+├── Grid.tsx             # Responsive grid system
+├── ActionButton.tsx     # Enhanced button with variants
+└── index.ts             # Centralized exports
+```
+
+### Chrome Extension Optimizations
+
+The design system includes specific optimizations for Chrome extension constraints:
+
+- **Maximum width**: 28rem (448px) for optimal side panel display
+- **Compact spacing**: Reduced spacing scale for limited real estate
+- **Responsive grids**: 2-3 columns max for extension width
+- **Component presets**: ExtensionButton, CompactStack, MetricsGrid
+
+### Development Tools
+
+```typescript
+// Debug tokens in development
+designSystem.dev.logTokens();
+
+// Validate token usage
+designSystem.dev.validate.spacing('1rem');
+
+// Access component tokens
+const buttonTokens = getComponentToken('button.padding.sm');
+```
+
 ## 🔧 Project Structure
 
 ```
@@ -155,6 +232,14 @@ woozi-wxt/
 │   │   ├── collections/   # Lead collections management
 │   │   ├── screens/       # Main application screens
 │   │   └── ui/           # Reusable UI components
+│   │       └── design-system/  # 🎨 Complete design system
+│   │           ├── tokens/     # Modular design tokens
+│   │           ├── Typography.tsx
+│   │           ├── Box.tsx     # Layout primitives
+│   │           ├── Stack.tsx
+│   │           ├── Grid.tsx
+│   │           ├── ActionButton.tsx
+│   │           └── index.ts    # Centralized exports
 │   ├── lib/
 │   │   ├── supabase.ts   # Supabase client setup
 │   │   └── collections.ts # Collections API helpers
@@ -261,6 +346,32 @@ For issues and questions:
 - Review [Supabase Auth documentation](https://supabase.com/docs/guides/auth)
 - Review [WXT framework documentation](https://wxt.dev/)
 - Open an issue in this repository
+
+## 🎯 Recent Improvements (January 2025)
+
+### Chrome Extension UI Standardization
+
+A comprehensive standardization initiative was completed to create a cohesive, professional interface:
+
+#### **Size & Spacing Standardization**
+- **✅ Fixed CTA Section**: Reduced height mismatch from 12px to 8px between main button and icon button
+- **✅ Standardized Icon Sizes**: All UI icons now use consistent 16px baseline (h-4 w-4)
+- **✅ Optimized Footer**: Reduced tab height from 56px to 48px for better proportions
+- **✅ Consistent Touch Targets**: Better accessibility with standardized button sizes
+
+#### **Design System Enhancements**
+- **📏 Chrome Extension Size Tokens**: Standardized button (40px/32px/28px) and icon (20px/16px/14px) hierarchies
+- **🔧 Spacing Validation**: Development utilities for 4px grid system compliance
+- **📚 Comprehensive Documentation**: Complete spacing guidelines and implementation examples
+- **⚡ Performance Improvements**: Resolved React prop conflicts and eliminated console errors
+
+#### **Component Improvements**
+- **LeadsPage**: Optimized CTA section with proper button/icon alignment
+- **Footer**: Better proportioned navigation with consistent icon sizing
+- **CollectionListView**: Standardized action icons and improved touch targets
+- **Design Tokens**: Enhanced Chrome extension specific sizing standards
+
+The extension now provides a polished, professional user experience with consistent visual hierarchy and optimal usability for Chrome side panel constraints.
 
 ## 🚀 Roadmap
 

@@ -20,7 +20,7 @@ export function Footer({ activeTab, onTabChange }: FooterProps) {
     <Card className="rounded-none border-0 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="p-2">
         <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 h-14 bg-transparent p-1">
+          <TabsList className="grid w-full grid-cols-4 h-12 bg-transparent p-1">
             {navigationItems.map(({ id, label, icon: Icon }) => (
               <TabsTrigger
                 key={id}
